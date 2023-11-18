@@ -24,7 +24,6 @@ const GradeCalculator = () => {
     const newData = [...gradeData];
     newData[index] = { ...newData[index], [name]: value };
     setGradeData(newData);
-    console.log(newData);
   };
 
   const addSubjectRow = () => {
@@ -120,7 +119,7 @@ const GradeCalculator = () => {
     };
     // --- This is the code to download the PDF file from the server ---
     console.log(getGradeResult);
-    const response = await apiClient.genPDF(getGradeResult);
+    const response = await apiClient.genPDFGradeCalculator(getGradeResult);
     console.log(response);
 
     const blob = new Blob([response.data], { type: "application/pdf" });
