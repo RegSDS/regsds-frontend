@@ -19,7 +19,7 @@ services:
     ports:
       - '5002:5002'
   grade-assessment:
-    image: pawarisble/sds-grade-assessment
+    image: jojopnz/sds-grade-assessment
     container_name: regsds-grade-assessment
     env_file:
       - .env
