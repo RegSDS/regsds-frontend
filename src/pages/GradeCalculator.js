@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import PdfDownloadButton from "../components/PdfDownloadButton";
+import { apiClient } from "../utils/clients";
 
 const grades = ["-", "A", "B+", "B", "C+", "C", "D+", "D", "F"];
 
 const GradeCalculator = () => {
   const [gradeData, setGradeData] = useState([
-    { subject: "", credit: "0.5", grade: "" },
+    { courseName: "", credit: "0.5", grade: "" },
   ]);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [gradeResult, setGradeResult] = useState(0);
   const [isPDF, setIsPDF] = useState(false);
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
+  const [pdfResult, setPdfResult] = useState();
+  const [getGradeResult, setGetGradeResult] = useState();
 
   const handleNameChange = (event) => {
     setName(event.target.value);
@@ -25,7 +28,7 @@ const GradeCalculator = () => {
   };
 
   const addSubjectRow = () => {
-    setGradeData([...gradeData, { subject: "", credit: "0.5", grade: "" }]);
+    setGradeData([...gradeData, { courseName: "", credit: "0.5", grade: "" }]);
   };
 
   // const calculateGPA = () => {
@@ -69,17 +72,81 @@ const GradeCalculator = () => {
   const onSubmit = () => {
     // Add your own logic to submit the form
     setIsSubmitted(true);
-    const transformedArray = gradeData.map((item) => [
-      convertGradeToValue(item.grade),
-      parseFloat(item.credit),
-    ]);
-    console.log(name);
-    console.log(transformedArray);
-    console.log(`isPDF: ${isPDF}`);
+    const newGrade = gradeData.map((grade) => ({
+      ...grade,
+      credit: parseFloat(grade.credit),
+    }));
+    const result = {
+      name: name,
+      grades: newGrade,
+      isPDF: isPDF,
+    };
+    // console.log(name);
+    console.log(result);
+    // console.log(`isPDF: ${isPDF}`);
+    apiClient.postGradeCalculator(result).then((response) => {
+      console.log(response.data);
+      setGetGradeResult(response.data);
+      setGradeResult(response.data.GPA);
+      // setPdfResult(response.data.pdfFile.data);
+    });
   };
 
   const fileUrl =
     "https://mycourseville-default.s3.ap-southeast-1.amazonaws.com/useruploaded_course_files/2023_1/35359/materials/SDS_2023_Project-172259-16974308330695.pdf";
+
+  const fetchPDF = async () => {
+    const ex = {
+      name: "Nitiwat Jongruktrakoon",
+      credits: 9,
+      GPA: "3.90",
+      grades: [
+        {
+          courseName: "Software Defined System",
+          grade: "A",
+          credit: 3,
+        },
+        {
+          courseName: "Software Architecture",
+          grade: "B+",
+          credit: 3,
+        },
+        {
+          courseName: "Computer Security",
+          grade: "A",
+          credit: 3,
+        },
+      ],
+    };
+    // --- This is the code to download the PDF file from the server ---
+    console.log(getGradeResult);
+    const response = await apiClient.genPDF(getGradeResult);
+    console.log(response);
+
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "gradeCalcultor.pdf";
+    link.click();
+
+    // console.log("PDFRESULT",pdfResult);
+    // const pdfBlob = new Blob([pdfResult], { type: 'application/' });    // const blob = new Blob(Buffer.from(pdfResult), {type: "application/pdf"});
+    // console.log(pdfBlob)
+    // const blobUrl = URL.createObjectURL(pdfBlob);
+
+    // // Create a link element
+    // const link = document.createElement('a');
+    // link.href = blobUrl;
+    // link.download = 'example.pdf';
+
+    // // Append the link to the document and trigger a click event
+    // document.body.appendChild(link);
+    // link.click();
+
+    // // Clean up by removing the link element and revoking the Blob URL
+    // document.body.removeChild(link);
+    // URL.revokeObjectURL(blobUrl);
+  };
   return (
     <div className="container">
       <h1>Grade Calculator</h1>
@@ -87,7 +154,7 @@ const GradeCalculator = () => {
         Enter student name:
         <input type="text" value={name} onChange={handleNameChange} />
       </label>
-      <table style={{marginTop: "20px"}}>
+      <table style={{ marginTop: "20px" }}>
         <thead>
           <tr>
             <th>#</th>
@@ -103,8 +170,8 @@ const GradeCalculator = () => {
               <td>
                 <input
                   type="text"
-                  name="subject"
-                  value={subject.subject}
+                  name="courseName"
+                  value={subject.courseName}
                   onChange={(e) => handleInputChange(index, e)}
                 />
               </td>
@@ -166,9 +233,12 @@ const GradeCalculator = () => {
           <div style={{ marginTop: "20px" }}>
             <strong>GPA: {gradeResult}</strong>
           </div>
-          <div style={{ marginTop: "20px" }}>
-            <PdfDownloadButton fileUrl={fileUrl} />
-          </div>
+          {isPDF && (
+            <div style={{ marginTop: "20px" }}>
+              <button onClick={fetchPDF}>PDF</button>
+              {/* <PdfDownloadButton fileUrl={fileUrl} /> */}
+            </div>
+          )}
         </>
       )}
     </div>
