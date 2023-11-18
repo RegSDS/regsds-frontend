@@ -1,0 +1,38 @@
+version: '3'
+services:
+  course-scheduler:
+    image: jojopnz/sds-course-scheduler
+    container_name: regsds-course-scheduler
+    env_file:
+      - .env
+    environment:
+      - PORT=${REACT_APP_COURSE_SCHEDULER_URL}
+    ports:
+      - '5001:${REACT_APP_COURSE_SCHEDULER_URL}'
+  grade-calculator:
+    image: abcdeclair/sds-grade-calculator
+    container_name: regsds-grade-calculator
+    env_file:
+      - .env
+    environment:
+      - PORT=${REACT_APP_GRADE_CALCULATOR_URL}
+    ports:
+      - '5002:${REACT_APP_GRADE_CALCULATOR_URL}'
+  grade-assessment:
+    image: pawarisble/sds-grade-assessment
+    container_name: regsds-grade-assessment
+    env_file:
+      - .env
+    environment:
+      - GRADE_ASSESSMENT_PORT=${REACT_APP_GRADE_ASSESSMENT_URL}
+    ports:
+      - '5003:${REACT_APP_GRADE_ASSESSMENT_URL}'
+  pdf-generator:
+    image: nitiwatowen/regsds-pdf-generator
+    container_name: regsds-pdf-generator
+    env_file:
+      - .env
+    environment:
+      - PORT=${REACT_APP_PDF_GENERATOR_URL}
+    ports: 
+     - '5004:${REACT_APP_PDF_GENERATOR_URL}'
