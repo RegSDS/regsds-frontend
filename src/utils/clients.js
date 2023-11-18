@@ -2,7 +2,7 @@ import axios from "axios";
 
 const postGradeCalculator = async (data) => {
   const response = await axios.post(
-    process.env.REACT_APP_COURSE_SCHEDULER_URL + "gpa",
+    process.env.REACT_APP_GRADE_CALCULATOR_URL + "/gpa",
     data,
   );
   return response;
@@ -10,7 +10,7 @@ const postGradeCalculator = async (data) => {
 
 const postGradeAssessment = async (data) => {
   const response = await axios.post(
-    process.env.REACT_APP_GRADE_ASSESSMENT_URL + "gradeAssessment",
+    process.env.REACT_APP_GRADE_ASSESSMENT_URL + "/gradeAssessment",
     data,
   );
   return response;
@@ -18,14 +18,14 @@ const postGradeAssessment = async (data) => {
 
 const getCourseList = async () => {
   const response = await axios.get(
-    process.env.REACT_APP_COURSE_SCHEDULER_URL + "courses"
+    process.env.REACT_APP_COURSE_SCHEDULER_URL + "/courses"
   );
   return response;
 };
 
 const genPDFGradeCalculator = async (data) => {
   const response = await axios.post(
-    process.env.REACT_APP_PDF_GENERATOR_URL + "generate-pdf/grade-calculator",
+    process.env.REACT_APP_PDF_GENERATOR_URL + "/generate-pdf/grade-calculator",
     data,
     { responseType: "arraybuffer" }
   );
@@ -34,7 +34,7 @@ const genPDFGradeCalculator = async (data) => {
 
 const genPDFGradeAssessment = async (data) => {
   const response = await axios.post(
-    process.env.REACT_APP_PDF_GENERATOR_URL + "generate-pdf/grade-assessment",
+    process.env.REACT_APP_PDF_GENERATOR_URL + "/generate-pdf/grade-assessment",
     data,
     { responseType: "arraybuffer" }
   );

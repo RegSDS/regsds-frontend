@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PdfDownloadButton from "../components/PdfDownloadButton";
 import { apiClient } from "../utils/clients";
 
 const grades = ["-", "A", "B+", "B", "C+", "C", "D+", "D", "F"];
@@ -12,7 +11,6 @@ const GradeCalculator = () => {
   const [gradeResult, setGradeResult] = useState(0);
   const [isPDF, setIsPDF] = useState(false);
   const [name, setName] = useState("");
-  const [pdfResult, setPdfResult] = useState();
   const [getGradeResult, setGetGradeResult] = useState();
 
   const handleNameChange = (event) => {
@@ -28,44 +26,6 @@ const GradeCalculator = () => {
 
   const addSubjectRow = () => {
     setGradeData([...gradeData, { courseName: "", credit: "0.5", grade: "" }]);
-  };
-
-  // const calculateGPA = () => {
-  //   const totalCredits = gradeData.reduce(
-  //     (acc, subject) => acc + parseFloat(subject.credit),
-  //     0
-  //   );
-  //   const weightedSum = gradeData.reduce(
-  //     (acc, subject) =>
-  //       acc + convertGradeToValue(subject.grade) * parseFloat(subject.credit),
-  //     0
-  //   );
-  //   const gpa = weightedSum / totalCredits;
-  //   return gpa.toFixed(2);
-  // };
-
-  const convertGradeToValue = (grade) => {
-    // Add your own logic to convert the grade to a numerical value
-    switch (grade) {
-      case "A":
-        return 4.0;
-      case "B+":
-        return 3.5;
-      case "B":
-        return 3.0;
-      case "C+":
-        return 2.5;
-      case "C":
-        return 2.0;
-      case "D+":
-        return 1.5;
-      case "D":
-        return 1.0;
-      case "F":
-        return 0.0;
-      default:
-        return 0.0; // default to 0.0 for unknown grades
-    }
   };
 
   const onSubmit = () => {
@@ -91,32 +51,7 @@ const GradeCalculator = () => {
     });
   };
 
-  const fileUrl =
-    "https://mycourseville-default.s3.ap-southeast-1.amazonaws.com/useruploaded_course_files/2023_1/35359/materials/SDS_2023_Project-172259-16974308330695.pdf";
-
   const fetchPDF = async () => {
-    const ex = {
-      name: "Nitiwat Jongruktrakoon",
-      credits: 9,
-      GPA: "3.90",
-      grades: [
-        {
-          courseName: "Software Defined System",
-          grade: "A",
-          credit: 3,
-        },
-        {
-          courseName: "Software Architecture",
-          grade: "B+",
-          credit: 3,
-        },
-        {
-          courseName: "Computer Security",
-          grade: "A",
-          credit: 3,
-        },
-      ],
-    };
     // --- This is the code to download the PDF file from the server ---
     console.log(getGradeResult);
     const response = await apiClient.genPDFGradeCalculator(getGradeResult);
@@ -127,24 +62,6 @@ const GradeCalculator = () => {
     link.href = window.URL.createObjectURL(blob);
     link.download = "gradeCalcultor.pdf";
     link.click();
-
-    // console.log("PDFRESULT",pdfResult);
-    // const pdfBlob = new Blob([pdfResult], { type: 'application/' });    // const blob = new Blob(Buffer.from(pdfResult), {type: "application/pdf"});
-    // console.log(pdfBlob)
-    // const blobUrl = URL.createObjectURL(pdfBlob);
-
-    // // Create a link element
-    // const link = document.createElement('a');
-    // link.href = blobUrl;
-    // link.download = 'example.pdf';
-
-    // // Append the link to the document and trigger a click event
-    // document.body.appendChild(link);
-    // link.click();
-
-    // // Clean up by removing the link element and revoking the Blob URL
-    // document.body.removeChild(link);
-    // URL.revokeObjectURL(blobUrl);
   };
   return (
     <div className="container">

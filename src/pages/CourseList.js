@@ -1,30 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './CourseList.css'; // Import your CSS file
+import { apiClient } from '../utils/clients';
 
 const CourseList = () => {
-  const courses = [
-    {
-      name: "2110101 Computer Programming",
-      credit: 3,
-      startTime: "9:00",
-      endTime: "12:00",
-      days: ["WED"],
-    },
-    {
-      name: "2110327 Algorithm Design",
-      credit: 3,
-      startTime: "8:00",
-      endTime: "9:30",
-      days: ["TUE", "THU"],
-    },
-    {
-      name: "2110415 Software Defined Systems",
-      credit: 3,
-      startTime: "9:00",
-      endTime: "12:00",
-      days: ["MON"],
-    },
-  ];
+  const [courses, setCourses] = React.useState([]);
+
+  useEffect(() => {
+    // Add your code here
+    apiClient.getCourseList().then((response) => {
+
+      console.log(response.data);
+      setCourses(response.data.data);
+    });
+  }
+  , []);
 
   return (
     <div className="container">
