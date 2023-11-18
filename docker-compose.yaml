@@ -6,33 +6,33 @@ services:
     env_file:
       - .env
     environment:
-      - PORT=${REACT_APP_COURSE_SCHEDULER_URL}
+      - PORT=5001
     ports:
-      - '5001:${REACT_APP_COURSE_SCHEDULER_URL}'
+      - '5001:5001'
   grade-calculator:
     image: abcdeclair/sds-grade-calculator
     container_name: regsds-grade-calculator
     env_file:
       - .env
     environment:
-      - PORT=${REACT_APP_GRADE_CALCULATOR_URL}
+      - PORT=5002
     ports:
-      - '5002:${REACT_APP_GRADE_CALCULATOR_URL}'
+      - '5002:5002'
   grade-assessment:
     image: pawarisble/sds-grade-assessment
     container_name: regsds-grade-assessment
     env_file:
       - .env
     environment:
-      - GRADE_ASSESSMENT_PORT=${REACT_APP_GRADE_ASSESSMENT_URL}
+      - GRADE_ASSESSMENT_PORT=5003
     ports:
-      - '5003:${REACT_APP_GRADE_ASSESSMENT_URL}'
+      - '5003:5003'
   pdf-generator:
     image: nitiwatowen/regsds-pdf-generator
     container_name: regsds-pdf-generator
     env_file:
       - .env
     environment:
-      - PORT=${REACT_APP_PDF_GENERATOR_URL}
+      - PORT=5004
     ports: 
-     - '5004:${REACT_APP_PDF_GENERATOR_URL}'
+     - '5004:5004'
