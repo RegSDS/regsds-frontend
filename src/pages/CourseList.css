@@ -1,0 +1,20 @@
+.course-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.course-table th,
+.course-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.course-table th {
+  background-color: #f2f2f2;
+}
+
+.course-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
