@@ -24,6 +24,15 @@ const GradeAssessment = () => {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  const [isPDF, setIsPDF] = useState(false);
+
+  const [name, setName] = useState('');
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+
+
   const handleScoreChange = (index, event) => {
     let { name, value } = event.target;
     if (name === "score" && value > 100) {
@@ -77,14 +86,20 @@ const GradeAssessment = () => {
         F_score: criteria[7].score,
       },
     };
+    console.log(name);
     console.log(result);
+    console.log(`isPDF: ${isPDF}`);
     setIsSubmitted(!isSubmitted);
   };
 
   return (
     <div className="container">
       <h1>Grade Assessment</h1>
-      <table>
+      <label>
+        Enter professor name:
+        <input type="text" value={name} onChange={handleNameChange} />
+      </label>
+      <table style={{marginTop: "20px"}}>
         <thead>
           <tr>
             <th>#</th>
@@ -178,6 +193,26 @@ const GradeAssessment = () => {
           </table>
         </div>
       )}
+      <div style={{ marginTop: "20px" }}>
+        <label>
+          <input
+            type="radio"
+            value="noPDF"
+            checked={!isPDF}
+            onChange={() => setIsPDF(false)}
+          />
+          No PDF
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="withPDF"
+            checked={isPDF}
+            onChange={() => setIsPDF(true)}
+          />
+          With PDF
+        </label>
+      </div>
       <button style={{ marginTop: "20px" }} onClick={onSubmit}>
         Submit
       </button>

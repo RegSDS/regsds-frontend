@@ -10,6 +10,11 @@ const GradeCalculator = () => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [gradeResult, setGradeResult] = useState(0);
   const [isPDF, setIsPDF] = useState(false);
+  const [name, setName] = useState('');
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
 
   const handleInputChange = (index, event) => {
     const { name, value } = event.target;
@@ -64,8 +69,13 @@ const GradeCalculator = () => {
   const onSubmit = () => {
     // Add your own logic to submit the form
     setIsSubmitted(true);
-    const transformedArray = gradeData.map(item => [convertGradeToValue(item.grade), parseFloat(item.credit)]);
+    const transformedArray = gradeData.map((item) => [
+      convertGradeToValue(item.grade),
+      parseFloat(item.credit),
+    ]);
+    console.log(name);
     console.log(transformedArray);
+    console.log(`isPDF: ${isPDF}`);
   };
 
   const fileUrl =
@@ -73,7 +83,11 @@ const GradeCalculator = () => {
   return (
     <div className="container">
       <h1>Grade Calculator</h1>
-      <table>
+      <label>
+        Enter student name:
+        <input type="text" value={name} onChange={handleNameChange} />
+      </label>
+      <table style={{marginTop: "20px"}}>
         <thead>
           <tr>
             <th>#</th>
@@ -128,20 +142,20 @@ const GradeCalculator = () => {
         <label>
           <input
             type="radio"
-            value="withPDF"
-            checked={isPDF}
-            onChange={() => setIsPDF(true)}
-          />
-          With PDF
-        </label>
-        <label>
-          <input
-            type="radio"
             value="noPDF"
             checked={!isPDF}
             onChange={() => setIsPDF(false)}
           />
           No PDF
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="withPDF"
+            checked={isPDF}
+            onChange={() => setIsPDF(true)}
+          />
+          With PDF
         </label>
       </div>
       <button style={{ marginTop: "10px" }} onClick={onSubmit}>
